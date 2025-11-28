@@ -1,10 +1,10 @@
 # 🚀 Supabase Database Backup & Restore Tool
 
-All-in-One tool untuk backup dan restore database Supabase dengan fitur lengkap:
-- ✅ Smart backup dengan comparison (incremental)
-- ✅ Optimized backup dengan multithreading
-- ✅ Safe restore dengan automatic safety backup
-- ✅ Optimized restore dengan parallel processing
+All-in-One tool for backing up and restoring Supabase databases with comprehensive features:
+- ✅ Smart backup with comparison (incremental)
+- ✅ Optimized backup with multithreading
+- ✅ Safe restore with automatic safety backup
+- ✅ Optimized restore with parallel processing
 - ✅ Compression support (gzip)
 - ✅ Progress bar monitoring
 - ✅ Rollback mechanism
@@ -12,18 +12,18 @@ All-in-One tool untuk backup dan restore database Supabase dengan fitur lengkap:
 ## 📋 Features
 
 ### Backup Features
-- **Smart Comparison**: Hanya backup tabel yang berubah (incremental)
-- **Multithreading**: Parallel table fetching untuk performa lebih cepat
-- **Compression**: Gzip compression untuk mengurangi ukuran file (70-80% reduction)
-- **Progress Bar**: Real-time monitoring dengan tqdm
-- **Auto Cleanup**: Otomatis menghapus backup lama (keep 288 = 24 jam)
+- **Smart Comparison**: Only backup tables that changed (incremental)
+- **Multithreading**: Parallel table fetching for faster performance
+- **Compression**: Gzip compression to reduce file size (70-80% reduction)
+- **Progress Bar**: Real-time monitoring with tqdm
+- **Auto Cleanup**: Automatically removes old backups (keeps 288 = 24 hours)
 
 ### Restore Features
-- **Safe Restore**: Automatic safety backup sebelum restore
+- **Safe Restore**: Automatic safety backup before restore
 - **Optimized Restore**: Parallel batch processing
-- **Data Validation**: Validasi backup sebelum restore
-- **Rollback**: Rollback ke safety backup jika restore gagal
-- **Interactive Mode**: Timeline selection untuk memilih backup
+- **Data Validation**: Validates backup before restore
+- **Rollback**: Rollback to safety backup if restore fails
+- **Interactive Mode**: Timeline selection to choose backup
 
 ## 🚀 Quick Start
 
@@ -40,12 +40,12 @@ pip install -r requirements.txt
 
 ### Configuration
 
-1. Copy `env.example` ke `.env`:
+1. Copy `env.example` to `.env`:
 ```bash
 cp env.example .env
 ```
 
-2. Edit `.env` dan isi dengan kredensial Supabase:
+2. Edit `.env` and fill in your Supabase credentials:
 ```env
 SUPABASE_URL=https://your-project.supabase.co
 SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
@@ -83,13 +83,13 @@ python supabase_backup.py list
 
 ```bash
 # Safe restore (with automatic safety backup)
-python supabase_backup.py restore --safe supabase_backup_YYYYMMDD_HHMMSS.json
+python supabase_backup.py restore --safe --file supabase_backup_YYYYMMDD_HHMMSS.json
 
 # Optimized restore (with multithreading)
-python supabase_backup.py restore --safe <backup_file> --workers 5
+python supabase_backup.py restore --safe --file <backup_file> --workers 5
 
 # Interactive restore (timeline selection)
-python supabase_backup.py restore --interactive
+python supabase_backup.py restore --interactive --safe
 
 # Restore without safety backup (not recommended)
 python supabase_backup.py restore --file <backup_file>
@@ -202,23 +202,23 @@ chmod +x run_backup.sh
 
 ### Automatic Safety Backup
 
-Saat melakukan restore dengan `--safe`, tool akan:
-1. ✅ Membuat safety backup otomatis sebelum restore
-2. ✅ Validasi backup data sebelum restore
-3. ✅ Record current state untuk rollback reference
-4. ✅ Verifikasi restore setelah selesai
+When performing restore with `--safe`, the tool will:
+1. ✅ Create automatic safety backup before restore
+2. ✅ Validate backup data before restore
+3. ✅ Record current state for rollback reference
+4. ✅ Verify restore after completion
 
 ### Rollback Mechanism
 
-Jika restore gagal atau menghasilkan hasil yang tidak diinginkan:
+If restore fails or produces undesired results:
 ```bash
 python supabase_backup.py rollback safety_backup_YYYYMMDD_HHMMSS.json.gz
 ```
 
-Rollback akan:
-1. ✅ Membuat safety backup sebelum rollback
-2. ✅ Restore database ke state sebelum restore sebelumnya
-3. ✅ Menyediakan pre-rollback backup untuk recovery
+Rollback will:
+1. ✅ Create safety backup before rollback
+2. ✅ Restore database to state before previous restore
+3. ✅ Provide pre-rollback backup for recovery
 
 ## 📝 Examples
 
@@ -232,7 +232,7 @@ python supabase_backup.py backup
 python supabase_backup.py list
 
 # If needed, restore from yesterday
-python supabase_backup.py restore --interactive
+python supabase_backup.py restore --interactive --safe
 ```
 
 ### Emergency Restore
@@ -242,7 +242,7 @@ python supabase_backup.py restore --interactive
 python supabase_backup.py list
 
 # 2. Safe restore with automatic safety backup
-python supabase_backup.py restore --safe supabase_backup_20251128_120000.json
+python supabase_backup.py restore --safe --file supabase_backup_20251128_120000.json
 
 # 3. If restore fails, rollback
 python supabase_backup.py rollback safety_backup_20251128_120500.json.gz
@@ -255,7 +255,7 @@ python supabase_backup.py rollback safety_backup_20251128_120500.json.gz
 python supabase_backup.py backup --workers 10
 
 # Use 5 workers for faster restore
-python supabase_backup.py restore --safe <backup> --workers 5
+python supabase_backup.py restore --safe --file <backup> --workers 5
 ```
 
 ## 🐛 Troubleshooting
@@ -295,9 +295,8 @@ python supabase_backup.py list
 
 ## 📚 Documentation
 
-Lihat folder `docs/` untuk dokumentasi lengkap:
+See `docs/` folder for complete documentation:
 - `INSTALLATION.md` - Setup instructions
-- `QUICK_START.md` - Quick start guide
 - `SAFETY_FEATURES.md` - Safety features documentation
 - `TROUBLESHOOTING.md` - Common issues and solutions
 - `USAGE_EXAMPLES.md` - Usage examples

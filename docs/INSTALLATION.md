@@ -43,7 +43,7 @@ pip install -r requirements.txt
 This will install:
 - `supabase` - Supabase Python client
 - `python-dotenv` - Environment variable management
-- `psycopg2-binary` - PostgreSQL adapter (optional, for direct connection)
+- `tqdm` - Progress bar library
 
 ### 4. Configure Environment Variables
 
@@ -76,7 +76,7 @@ SUPABASE_SERVICE_ROLE_KEY=your_service_role_key_here
 
 ```bash
 # Test connection
-python backup_supabase.py --list
+python supabase_backup.py list
 
 # If successful, you should see backup list or "No backups found"
 ```
@@ -85,10 +85,10 @@ python backup_supabase.py --list
 
 ```bash
 # Create a test backup
-python backup_supabase.py
+python supabase_backup.py backup
 
 # List backups
-python backup_supabase.py --list
+python supabase_backup.py list
 ```
 
 ## Troubleshooting Installation
@@ -119,7 +119,7 @@ pip install -r requirements.txt
 ## Next Steps
 
 After installation:
-1. ✅ Read [QUICK_START.md](QUICK_START.md) for basic usage
+1. ✅ Read [README.md](../README.md) for basic usage
 2. ✅ Read [SAFETY_FEATURES.md](SAFETY_FEATURES.md) for safe restore
 3. ✅ Set up cron job for automated backups (see `cron_example.txt`)
 
@@ -129,4 +129,3 @@ If you encounter issues:
 1. Check [TROUBLESHOOTING.md](TROUBLESHOOTING.md)
 2. Verify all prerequisites are met
 3. Check `.env` file configuration
-
