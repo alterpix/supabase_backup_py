@@ -31,7 +31,7 @@ All-in-One tool untuk backup dan restore database Supabase dengan fitur lengkap:
 
 ```bash
 # Clone repository
-git clone <repository-url>
+git clone https://github.com/alterpix/supabase_backup_py
 cd backup_release
 
 # Install dependencies
