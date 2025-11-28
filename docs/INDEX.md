@@ -4,7 +4,7 @@ Quick navigation to all documentation:
 
 ## 🚀 Getting Started
 
-1. **[README.md](README.md)** - Main documentation, overview, and quick start
+1. **[README.md](../README.md)** - Main documentation, overview, and quick start
 2. **[INSTALLATION.md](INSTALLATION.md)** - Step-by-step installation guide
 3. **[QUICK_START.md](QUICK_START.md)** - Quick start guide for basic usage
 4. **[QUICK_START_SAFE.md](QUICK_START_SAFE.md)** - Quick start for safe restore
@@ -48,12 +48,13 @@ python backup_supabase_safe.py --list-safety            # List safety backups
 
 ## 📁 File Structure
 
-- `backup_supabase.py` - Main backup script
-- `backup_supabase_safe.py` - Safe restore script
-- `restore_safe.sh` - Wrapper script
-- `run_backup.sh` - Cron job script
-- `requirements.txt` - Python dependencies
-- `env.example` - Environment variables template
+- `backup_supabase.py` - Main backup script (root)
+- `backup_supabase_safe.py` - Safe restore script (root)
+- `restore_safe.sh` - Wrapper script (root)
+- `run_backup.sh` - Cron job script (root)
+- `requirements.txt` - Python dependencies (root)
+- `env.example` - Environment variables template (root)
+- `docs/` - All documentation files
 
 ## 🆘 Need Help?
 

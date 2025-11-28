@@ -23,6 +23,7 @@ Automated backup and restore tool for Supabase PostgreSQL database with **Smart 
 - [Usage](#usage)
 - [Safety Features](#safety-features)
 - [Configuration](#configuration)
+- [Documentation](#documentation)
 - [Troubleshooting](#troubleshooting)
 - [Contributing](#contributing)
 - [License](#license)
@@ -270,6 +271,22 @@ backup_release/
 └── QUICK_START.md         # Quick start guide
 ```
 
+## 📚 Documentation
+
+All detailed documentation is available in the [`docs/`](docs/) folder:
+
+- **[Installation Guide](docs/INSTALLATION.md)** - Step-by-step installation instructions
+- **[Quick Start](docs/QUICK_START.md)** - Get started quickly
+- **[Safe Restore Guide](docs/QUICK_START_SAFE.md)** - Safe restore quick start
+- **[Usage Examples](docs/USAGE_EXAMPLES.md)** - Common use cases and examples
+- **[Safety Features](docs/SAFETY_FEATURES.md)** - Safety features documentation
+- **[Troubleshooting](docs/TROUBLESHOOTING.md)** - Common issues and solutions
+- **[Setup Guide](docs/SETUP.md)** - Detailed setup instructions
+- **[Changelog](docs/CHANGELOG.md)** - Version history
+- **[Contributing](docs/CONTRIBUTING.md)** - How to contribute
+- **[Project Structure](docs/PROJECT_STRUCTURE.md)** - Project structure overview
+- **[Documentation Index](docs/INDEX.md)** - Complete documentation index
+
 ## 🔧 Troubleshooting
 
 ### Common Issues
@@ -295,7 +312,7 @@ backup_release/
 2. Verify `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY`
 3. Check network connectivity
 
-See [TROUBLESHOOTING.md](TROUBLESHOOTING.md) for more details.
+See [Troubleshooting Guide](docs/TROUBLESHOOTING.md) for more details.
 
 ## 📊 Backup Format
 
@@ -392,10 +409,7 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## 📚 Documentation
 
-- [SAFETY_FEATURES.md](SAFETY_FEATURES.md) - Safety features documentation
-- [TROUBLESHOOTING.md](TROUBLESHOOTING.md) - Troubleshooting guide
-- [SETUP.md](SETUP.md) - Detailed setup instructions
-- [QUICK_START.md](QUICK_START.md) - Quick start guide
+All documentation is available in the [`docs/`](docs/) folder. See [Documentation Index](docs/INDEX.md) for complete list.
 
 ## ⚠️ Important Notes
 
