@@ -15,7 +15,7 @@
 ```bash
 # If using git
 git clone https://github.com/alterpix/supabase_backup_py
-cd backup_release
+cd supabase_backup_py
 
 # Or download and extract ZIP file
 ```

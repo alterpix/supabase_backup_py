@@ -1,5 +1,5 @@
 #!/bin/bash
-# Script untuk menjalankan backup via cron job
+# Script to run backup via cron job
 # Usage: Add to crontab for automated backups
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"

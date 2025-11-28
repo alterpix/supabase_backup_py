@@ -28,7 +28,7 @@ python supabase_backup.py list
 crontab -e
 
 # Add this line:
-*/5 * * * * /path/to/backup_release/run_backup.sh
+*/5 * * * * /path/to/supabase_backup_py/run_backup.sh
 ```
 
 ### Example 3: Restore After Accidental Deletion

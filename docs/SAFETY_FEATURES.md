@@ -29,7 +29,7 @@ The backup program is now equipped with safety features to prevent data corrupti
 ### Safe Restore (Recommended)
 
 ```bash
-cd /path/to/backup_release
+cd /path/to/supabase_backup_py
 source venv/bin/activate  # If using virtual environment
 
 # Restore with automatic safety backup
@@ -66,7 +66,7 @@ python supabase_backup.py restore --file <backup_file>
 ## 📁 File Structure
 
 ```
-backup_release/
+supabase_backup_py/
 ├── backups/              # Backup files
 ├── safety_backups/      # Safety backups (pre-restore snapshots)
 ├── summaries/           # Restore logs and summaries

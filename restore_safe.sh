@@ -1,6 +1,6 @@
 #!/bin/bash
 # Safe Restore Wrapper Script
-# Menggunakan supabase_backup.py untuk restore dengan safety features
+# Uses supabase_backup.py for restore with safety features
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$SCRIPT_DIR"

@@ -32,7 +32,7 @@ All-in-One tool for backing up and restoring Supabase databases with comprehensi
 ```bash
 # Clone repository
 git clone https://github.com/alterpix/supabase_backup_py
-cd backup_release
+cd supabase_backup_py
 
 # Install dependencies
 pip install -r requirements.txt
@@ -163,7 +163,7 @@ DEFAULT_SHOW_PROGRESS = True     # Show progress bar
 ## 📁 Project Structure
 
 ```
-backup_release/
+supabase_backup_py/
 ├── supabase_backup.py      # Main all-in-one script
 ├── requirements.txt         # Python dependencies
 ├── env.example             # Environment variables template
@@ -187,7 +187,7 @@ crontab -e
 
 Add entry for 5-minute backups:
 ```cron
-*/5 * * * * cd /path/to/backup_release && /usr/bin/python3 supabase_backup.py backup >> logs/cron.log 2>&1
+*/5 * * * * cd /path/to/supabase_backup_py && /usr/bin/python3 supabase_backup.py backup >> logs/cron.log 2>&1
 ```
 
 Or use the provided shell script:
@@ -195,7 +195,7 @@ Or use the provided shell script:
 chmod +x run_backup.sh
 # Edit run_backup.sh to set correct paths
 # Then add to crontab:
-*/5 * * * * /path/to/backup_release/run_backup.sh
+*/5 * * * * /path/to/supabase_backup_py/run_backup.sh
 ```
 
 ## 🛡️ Safety Features
