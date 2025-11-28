@@ -1,0 +1,25 @@
+# Contoh Cron Job untuk Backup Otomatis Supabase
+# Copy baris yang diinginkan ke crontab dengan: crontab -e
+
+# ⭐ BACKUP SETIAP 5 MENIT (Recommended untuk backup_app)
+*/5 * * * * /home/alterpix/Documents/rayhar_statistic/backup_app/run_backup.sh
+
+# Backup setiap hari jam 2 pagi
+0 2 * * * /home/alterpix/Documents/rayhar_statistic/backup_app/run_backup.sh
+
+# Backup setiap 6 jam
+0 */6 * * * /home/alterpix/Documents/rayhar_statistic/backup_app/run_backup.sh
+
+# Backup setiap hari Senin jam 3 pagi
+0 3 * * 1 /home/alterpix/Documents/rayhar_statistic/backup_app/run_backup.sh
+
+# Backup setiap hari kerja (Senin-Jumat) jam 1 pagi
+0 1 * * 1-5 /home/alterpix/Documents/rayhar_statistic/backup_app/run_backup.sh
+
+# Format: minute hour day month weekday command
+# */5 = setiap 5 menit
+# * = setiap
+# */6 = setiap 6 (jam, hari, dll)
+# 1-5 = range (Senin-Jumat)
+# 0,30 = pada menit 0 dan 30
+
