@@ -15,7 +15,7 @@ fi
 
 # Run backup
 echo "$(date '+%Y-%m-%d %H:%M:%S') - Starting backup..." >> logs/backup.log
-python backup_supabase.py >> logs/backup.log 2>&1
+python supabase_backup.py backup >> logs/backup.log 2>&1
 EXIT_CODE=$?
 
 if [ $EXIT_CODE -eq 0 ]; then

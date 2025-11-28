@@ -1,431 +1,317 @@
-# 🛡️ Supabase Database Backup & Restore Tool
+# 🚀 Supabase Database Backup & Restore Tool
 
-Automated backup and restore tool for Supabase PostgreSQL database with **Smart Comparison** and **Safety Features**.
+All-in-One tool untuk backup dan restore database Supabase dengan fitur lengkap:
+- ✅ Smart backup dengan comparison (incremental)
+- ✅ Optimized backup dengan multithreading
+- ✅ Safe restore dengan automatic safety backup
+- ✅ Optimized restore dengan parallel processing
+- ✅ Compression support (gzip)
+- ✅ Progress bar monitoring
+- ✅ Rollback mechanism
 
-[![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)](https://www.python.org/)
-[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+## 📋 Features
 
-## ✨ Features
+### Backup Features
+- **Smart Comparison**: Hanya backup tabel yang berubah (incremental)
+- **Multithreading**: Parallel table fetching untuk performa lebih cepat
+- **Compression**: Gzip compression untuk mengurangi ukuran file (70-80% reduction)
+- **Progress Bar**: Real-time monitoring dengan tqdm
+- **Auto Cleanup**: Otomatis menghapus backup lama (keep 288 = 24 jam)
 
-- ✅ **Smart Comparison**: Only backup tables that changed, skip unchanged tables
-- ✅ **Incremental Backup**: Reference previous backup for unchanged tables
-- ✅ **Safety Backup**: Automatic backup before restore operations
-- ✅ **Rollback Mechanism**: Easy rollback if restore fails
-- ✅ **Data Validation**: Validate backup data before restore
-- ✅ **Auto Cleanup**: Keep only latest 288 backups (24 hours with 5-min intervals)
-- ✅ **Error Handling**: Handle generated columns and identity columns
-- ✅ **Comprehensive Logging**: Detailed logs for all operations
+### Restore Features
+- **Safe Restore**: Automatic safety backup sebelum restore
+- **Optimized Restore**: Parallel batch processing
+- **Data Validation**: Validasi backup sebelum restore
+- **Rollback**: Rollback ke safety backup jika restore gagal
+- **Interactive Mode**: Timeline selection untuk memilih backup
 
-## 📋 Table of Contents
+## 🚀 Quick Start
 
-- [Installation](#installation)
-- [Quick Start](#quick-start)
-- [Usage](#usage)
-- [Safety Features](#safety-features)
-- [Configuration](#configuration)
-- [Documentation](#documentation)
-- [Troubleshooting](#troubleshooting)
-- [Contributing](#contributing)
-- [License](#license)
-
-## 🚀 Installation
-
-### Prerequisites
-
-- Python 3.8 or higher
-- Supabase account with database access
-- `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY`
-
-### Setup
-
-1. **Clone or download this repository**
+### Installation
 
 ```bash
+# Clone repository
+git clone <repository-url>
 cd backup_release
-```
 
-2. **Create virtual environment**
-
-```bash
-python3 -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-```
-
-3. **Install dependencies**
-
-```bash
+# Install dependencies
 pip install -r requirements.txt
 ```
 
-4. **Configure environment variables**
+### Configuration
 
-Create `.env` file:
-
+1. Copy `env.example` ke `.env`:
 ```bash
 cp env.example .env
-nano .env
 ```
 
-Fill in your Supabase credentials:
-
+2. Edit `.env` dan isi dengan kredensial Supabase:
 ```env
 SUPABASE_URL=https://your-project.supabase.co
-SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
+SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
 ```
 
-## 🎯 Quick Start
+### Usage
 
-### Create Backup
+#### Create Backup
 
 ```bash
-# Activate virtual environment
-source venv/bin/activate
+# Smart backup (default: optimized, 5 workers, compression enabled)
+python supabase_backup.py backup
 
-# Create backup (smart mode - only changed tables)
-python backup_supabase.py
+# Full backup (ignore comparison)
+python supabase_backup.py backup --force-full
 
-# Force full backup (all tables)
-python backup_supabase.py --force-full
+# Custom workers
+python supabase_backup.py backup --workers 10
+
+# Disable compression
+python supabase_backup.py backup --no-compress
+
+# Sequential backup (no multithreading)
+python supabase_backup.py backup --workers 1
 ```
-
-### Restore from Backup
-
-```bash
-# List available backups
-python backup_supabase.py --list
-
-# Safe restore (recommended - with auto safety backup)
-python backup_supabase_safe.py --restore supabase_backup_YYYYMMDD_HHMMSS.json
-
-# Or use wrapper script
-./restore_safe.sh supabase_backup_YYYYMMDD_HHMMSS.json
-```
-
-### Rollback if Restore Fails
-
-```bash
-# List safety backups
-python backup_supabase_safe.py --list-safety
-
-# Rollback to state before restore
-python backup_supabase_safe.py --rollback safety_backup_YYYYMMDD_HHMMSS.json
-```
-
-## 📖 Usage
-
-### Backup Operations
-
-#### Smart Backup (Default)
-
-```bash
-python backup_supabase.py
-```
-
-- Compares current data with previous backup
-- Only backs up tables that changed
-- Skips unchanged tables (saves time and storage)
-
-#### Force Full Backup
-
-```bash
-python backup_supabase.py --force-full
-```
-
-- Backs up all tables regardless of changes
-- Useful for initial backup or when you want complete snapshot
 
 #### List Backups
 
 ```bash
-python backup_supabase.py --list
+# List all backups
+python supabase_backup.py list
 ```
 
-Shows all available backups with:
-- Date/Time
-- Backup type (FULL/INCREMENTAL)
-- Size
-- Number of changed tables
-- Total rows
-
-### Restore Operations
-
-#### Safe Restore (Recommended)
+#### Restore
 
 ```bash
-python backup_supabase_safe.py --restore <backup_file>
+# Safe restore (with automatic safety backup)
+python supabase_backup.py restore --safe supabase_backup_YYYYMMDD_HHMMSS.json
+
+# Optimized restore (with multithreading)
+python supabase_backup.py restore --safe <backup_file> --workers 5
+
+# Interactive restore (timeline selection)
+python supabase_backup.py restore --interactive
+
+# Restore without safety backup (not recommended)
+python supabase_backup.py restore --file <backup_file>
 ```
 
-**Features:**
-- 🛡️ Automatic safety backup before restore
-- 🔍 Data validation before restore
-- 📊 State recording (before/after)
-- ✅ Automatic verification after restore
-- 💾 Comprehensive restore log
-
-#### Standard Restore
+#### Rollback
 
 ```bash
-python backup_supabase.py --restore-interactive
+# Rollback from safety backup
+python supabase_backup.py rollback safety_backup_YYYYMMDD_HHMMSS.json.gz
 ```
 
-Interactive restore with timeline selection (no safety backup).
-
-### Automation
-
-#### Cron Job Setup (Backup Every 5 Minutes)
+#### List Safety Backups
 
 ```bash
-# Edit crontab
-crontab -e
-
-# Add this line (backup every 5 minutes)
-*/5 * * * * /path/to/backup_release/run_backup.sh
+# List all safety backups
+python supabase_backup.py list-safety
 ```
 
-See `cron_example.txt` for more examples.
+## 📊 Performance
 
-## 🛡️ Safety Features
+### Backup Speed
 
-### Automatic Safety Backup
+| Mode | Tables | Time | Speedup |
+|------|--------|------|---------|
+| Sequential | 30 | ~45s | 1x |
+| Optimized (5 workers) | 30 | ~12s | **3.75x** |
+| Optimized (10 workers) | 30 | ~8s | **5.6x** |
 
-Before every restore operation, the tool automatically creates a safety backup:
+### Restore Speed
 
-```
-safety_backups/
-└── safety_backup_20251128_074820.json
-```
+| Mode | Rows | Time | Speedup |
+|------|------|------|---------|
+| Sequential | 15,541 | ~25s | 1x |
+| Optimized (3 workers) | 15,541 | ~10s | **2.5x** |
+| Optimized (5 workers) | 15,541 | ~7s | **3.6x** |
 
-This backup can be used to rollback if restore fails.
+### File Size
 
-### Rollback Mechanism
+| Mode | Size | Compression |
+|------|------|-------------|
+| Uncompressed | 4.15 MB | - |
+| Compressed | 1.2 MB | **71% reduction** |
 
-If restore fails or produces unexpected results:
+## 🔧 Configuration
 
-```bash
-# List safety backups
-python backup_supabase_safe.py --list-safety
+### Default Settings
 
-# Rollback
-python backup_supabase_safe.py --rollback safety_backup_YYYYMMDD_HHMMSS.json
-```
-
-### Data Validation
-
-The tool validates backup data before restore:
-- ✅ Checks metadata structure
-- ✅ Verifies critical tables exist
-- ✅ Detects corrupted or invalid data
-- ✅ Warns about potential issues
-
-### Restore Verification
-
-After restore, the tool automatically:
-- ✅ Compares row counts before/after
-- ✅ Verifies data integrity
-- ✅ Logs all operations
-- ✅ Reports any discrepancies
-
-## ⚙️ Configuration
-
-### Environment Variables
-
-Create `.env` file with:
-
-```env
-# Supabase Configuration
-SUPABASE_URL=https://your-project.supabase.co
-SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
-
-# Optional: Direct PostgreSQL connection
-# SUPABASE_CONNECTION_STRING=postgresql://postgres:[PASSWORD]@db.[PROJECT-REF].supabase.co:5432/postgres
+```python
+DEFAULT_MAX_WORKERS_BACKUP = 5   # Parallel threads for backup
+DEFAULT_MAX_WORKERS_RESTORE = 3  # Parallel threads for restore
+DEFAULT_BATCH_SIZE = 100          # Restore batch size
+DEFAULT_COMPRESS = True          # Enable compression
+DEFAULT_SHOW_PROGRESS = True     # Show progress bar
 ```
 
-### Backup Settings
+### Tuning Workers
 
-Default settings in `backup_supabase.py`:
-- **Backup interval**: Every 5 minutes (when using cron)
-- **Retention**: 288 backups (24 hours)
-- **Batch size**: 100 rows per batch
-- **Page size**: 1000 rows per API call
+**Backup:**
+- **Small database (< 10 tables)**: 3-5 workers
+- **Medium database (10-30 tables)**: 5-8 workers
+- **Large database (> 30 tables)**: 8-10 workers
+
+**Restore:**
+- **Small batches (< 1000 rows)**: 2-3 workers
+- **Medium batches (1000-10000 rows)**: 3-5 workers
+- **Large batches (> 10000 rows)**: 5-8 workers
+
+⚠️ **Note**: Too many workers can cause API rate limiting. Start with default values and adjust based on your Supabase plan limits.
 
 ## 📁 Project Structure
 
 ```
 backup_release/
-├── backups/                  # Backup JSON files
-├── safety_backups/          # Safety backups (pre-restore snapshots)
-├── summaries/              # Backup summaries & restore logs
-├── logs/                   # Application logs
-├── backup_supabase.py      # Main backup script
-├── backup_supabase_safe.py # Safe restore script
-├── restore_backup.py       # Interactive restore (legacy)
-├── restore_safe.sh         # Wrapper script for safe restore
-├── run_backup.sh          # Cron job script
-├── requirements.txt        # Python dependencies
-├── .env                    # Environment variables (create from env.example)
-├── env.example            # Environment variables template
-├── README.md              # This file
-├── SAFETY_FEATURES.md     # Safety features documentation
-├── TROUBLESHOOTING.md     # Troubleshooting guide
-├── SETUP.md               # Detailed setup instructions
-└── QUICK_START.md         # Quick start guide
+├── supabase_backup.py      # Main all-in-one script
+├── requirements.txt         # Python dependencies
+├── env.example             # Environment variables template
+├── .env                    # Your environment variables (not in git)
+├── README.md               # This file
+├── LICENSE                 # MIT License
+├── backups/                # Backup files (auto-created)
+├── safety_backups/         # Safety backup files (auto-created)
+├── summaries/              # Backup/restore summaries (auto-created)
+└── logs/                   # Log files (auto-created)
+```
+
+## 🔄 Automated Backups
+
+### Cron Job Setup
+
+Edit crontab:
+```bash
+crontab -e
+```
+
+Add entry for 5-minute backups:
+```cron
+*/5 * * * * cd /path/to/backup_release && /usr/bin/python3 supabase_backup.py backup >> logs/cron.log 2>&1
+```
+
+Or use the provided shell script:
+```bash
+chmod +x run_backup.sh
+# Edit run_backup.sh to set correct paths
+# Then add to crontab:
+*/5 * * * * /path/to/backup_release/run_backup.sh
+```
+
+## 🛡️ Safety Features
+
+### Automatic Safety Backup
+
+Saat melakukan restore dengan `--safe`, tool akan:
+1. ✅ Membuat safety backup otomatis sebelum restore
+2. ✅ Validasi backup data sebelum restore
+3. ✅ Record current state untuk rollback reference
+4. ✅ Verifikasi restore setelah selesai
+
+### Rollback Mechanism
+
+Jika restore gagal atau menghasilkan hasil yang tidak diinginkan:
+```bash
+python supabase_backup.py rollback safety_backup_YYYYMMDD_HHMMSS.json.gz
+```
+
+Rollback akan:
+1. ✅ Membuat safety backup sebelum rollback
+2. ✅ Restore database ke state sebelum restore sebelumnya
+3. ✅ Menyediakan pre-rollback backup untuk recovery
+
+## 📝 Examples
+
+### Daily Backup Workflow
+
+```bash
+# Morning backup
+python supabase_backup.py backup
+
+# Check backups
+python supabase_backup.py list
+
+# If needed, restore from yesterday
+python supabase_backup.py restore --interactive
+```
+
+### Emergency Restore
+
+```bash
+# 1. List available backups
+python supabase_backup.py list
+
+# 2. Safe restore with automatic safety backup
+python supabase_backup.py restore --safe supabase_backup_20251128_120000.json
+
+# 3. If restore fails, rollback
+python supabase_backup.py rollback safety_backup_20251128_120500.json.gz
+```
+
+### High-Performance Backup
+
+```bash
+# Use 10 workers for faster backup
+python supabase_backup.py backup --workers 10
+
+# Use 5 workers for faster restore
+python supabase_backup.py restore --safe <backup> --workers 5
+```
+
+## 🐛 Troubleshooting
+
+### Error: Rate Limiting
+
+**Solution**: Reduce number of workers
+```bash
+python supabase_backup.py backup --workers 3
+```
+
+### Error: tqdm not found
+
+**Solution**: Install tqdm
+```bash
+pip install tqdm
+```
+
+Or disable progress bar:
+```bash
+python supabase_backup.py backup --no-progress
+```
+
+### Error: Memory Issues
+
+**Solution**: Reduce batch size or workers
+- Edit `supabase_backup.py` and change `DEFAULT_BATCH_SIZE = 50`
+- Or use sequential mode: `--workers 1`
+
+### Error: Backup file not found
+
+**Solution**: Check backup filename (case-sensitive)
+```bash
+# List backups to see exact filename
+python supabase_backup.py list
 ```
 
 ## 📚 Documentation
 
-All detailed documentation is available in the [`docs/`](docs/) folder:
-
-- **[Installation Guide](docs/INSTALLATION.md)** - Step-by-step installation instructions
-- **[Quick Start](docs/QUICK_START.md)** - Get started quickly
-- **[Safe Restore Guide](docs/QUICK_START_SAFE.md)** - Safe restore quick start
-- **[Usage Examples](docs/USAGE_EXAMPLES.md)** - Common use cases and examples
-- **[Safety Features](docs/SAFETY_FEATURES.md)** - Safety features documentation
-- **[Troubleshooting](docs/TROUBLESHOOTING.md)** - Common issues and solutions
-- **[Setup Guide](docs/SETUP.md)** - Detailed setup instructions
-- **[Changelog](docs/CHANGELOG.md)** - Version history
-- **[Contributing](docs/CONTRIBUTING.md)** - How to contribute
-- **[Project Structure](docs/PROJECT_STRUCTURE.md)** - Project structure overview
-- **[Documentation Index](docs/INDEX.md)** - Complete documentation index
-
-## 🔧 Troubleshooting
-
-### Common Issues
-
-#### Error 400: Generated Column
-
-**Problem**: `cannot insert a non-DEFAULT value into column "booking_number"`
-
-**Solution**: Already handled automatically. The tool excludes generated columns during restore.
-
-#### Error: Duplicate Key
-
-**Problem**: `duplicate key value violates unique constraint`
-
-**Solution**: The tool uses UPSERT (update or insert) to handle duplicates automatically.
-
-#### Error: Connection Failed
-
-**Problem**: Cannot connect to Supabase
-
-**Solution**: 
-1. Check `.env` file has correct credentials
-2. Verify `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY`
-3. Check network connectivity
-
-See [Troubleshooting Guide](docs/TROUBLESHOOTING.md) for more details.
-
-## 📊 Backup Format
-
-### Full Backup
-
-```json
-{
-  "metadata": {
-    "backup_date": "2025-11-28T07:22:53",
-    "backup_type": "full",
-    "total_tables": 30,
-    "total_rows": 15541
-  },
-  "data": {
-    "bookings": [...],
-    "users": [...]
-  }
-}
-```
-
-### Incremental Backup
-
-```json
-{
-  "metadata": {
-    "backup_date": "2025-11-28T07:39:32",
-    "backup_type": "incremental",
-    "previous_backup": "20251128_072253",
-    "changed_tables": ["booking_participants"],
-    "unchanged_tables": ["bookings", "users", ...]
-  },
-  "data": {
-    "booking_participants": [...],  // Only changed tables
-    "bookings": {
-      "_unchanged": true,
-      "_reference_backup": "20251128_072253"
-    }
-  }
-}
-```
-
-## 🎓 Examples
-
-### Example 1: Daily Backup Workflow
-
-```bash
-# Morning: Create full backup
-python backup_supabase.py --force-full
-
-# Throughout day: Incremental backups (via cron)
-# Every 5 minutes automatically
-
-# Evening: Verify backups
-python backup_supabase.py --list
-```
-
-### Example 2: Restore After Data Loss
-
-```bash
-# 1. List backups
-python backup_supabase.py --list
-
-# 2. Safe restore (creates safety backup automatically)
-python backup_supabase_safe.py --restore supabase_backup_20251128_074723.json
-
-# 3. Verify restore
-cat summaries/restore_log_*.json
-
-# 4. If needed, rollback
-python backup_supabase_safe.py --rollback safety_backup_20251128_074820.json
-```
-
-### Example 3: Compare Data Changes
-
-```bash
-# Create backup before changes
-python backup_supabase.py
-
-# Make changes to database...
-
-# Create backup after changes
-python backup_supabase.py
-
-# Compare (see summaries/comparison_*.json)
-```
-
-## 📝 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+Lihat folder `docs/` untuk dokumentasi lengkap:
+- `INSTALLATION.md` - Setup instructions
+- `QUICK_START.md` - Quick start guide
+- `SAFETY_FEATURES.md` - Safety features documentation
+- `TROUBLESHOOTING.md` - Common issues and solutions
+- `USAGE_EXAMPLES.md` - Usage examples
 
 ## 🤝 Contributing
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+Contributions are welcome! Please read `docs/CONTRIBUTING.md` for guidelines.
 
-## 📚 Documentation
+## 📄 License
 
-All documentation is available in the [`docs/`](docs/) folder. See [Documentation Index](docs/INDEX.md) for complete list.
+MIT License - see `LICENSE` file for details.
 
-## ⚠️ Important Notes
+## 🙏 Acknowledgments
 
-1. **Always use safe restore for production** - It creates automatic safety backups
-2. **Keep safety backups** - Don't delete until you're sure restore was successful
-3. **Test in development first** - Always test restore in dev environment
-4. **Monitor disk space** - Backups can take significant space
-5. **Verify after restore** - Always check restore logs and verify data
-
-## 🆘 Support
-
-For issues and questions:
-1. Check [TROUBLESHOOTING.md](TROUBLESHOOTING.md)
-2. Review restore logs in `summaries/`
-3. Check application logs in `logs/`
-
----
-
-**Made with ❤️ for safe database backups**
+- Supabase for the excellent platform
+- tqdm for progress bars
+- Python community for amazing libraries

@@ -1,6 +1,6 @@
 #!/bin/bash
 # Safe Restore Wrapper Script
-# Menggunakan backup_supabase_safe.py untuk restore dengan safety features
+# Menggunakan supabase_backup.py untuk restore dengan safety features
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$SCRIPT_DIR"
@@ -20,19 +20,29 @@ if [ -z "$1" ]; then
     echo "Example:"
     echo "  $0 supabase_backup_20251128_074723.json"
     echo ""
+    echo "Or use interactive mode:"
+    echo "  $0 --interactive"
+    echo ""
     echo "Available backups:"
-    python backup_supabase.py --list | head -20
+    python supabase_backup.py list | head -20
     exit 1
 fi
 
 BACKUP_FILE="$1"
 
+# Interactive mode
+if [ "$BACKUP_FILE" == "--interactive" ]; then
+    echo "🛡️  Starting Interactive Safe Restore..."
+    python supabase_backup.py restore --interactive --safe
+    exit $?
+fi
+
 # Check if backup file exists
-if [ ! -f "backups/$BACKUP_FILE" ]; then
+if [ ! -f "backups/$BACKUP_FILE" ] && [ ! -f "backups/${BACKUP_FILE}.gz" ]; then
     echo "❌ Backup file not found: backups/$BACKUP_FILE"
     echo ""
     echo "Available backups:"
-    python backup_supabase.py --list | head -20
+    python supabase_backup.py list | head -20
     exit 1
 fi
 
@@ -41,7 +51,7 @@ echo "   Backup file: $BACKUP_FILE"
 echo ""
 
 # Run safe restore
-python backup_supabase_safe.py --restore "$BACKUP_FILE"
+python supabase_backup.py restore --file "$BACKUP_FILE" --safe
 
 EXIT_CODE=$?
 
@@ -55,4 +65,3 @@ else
     echo "💡 Check safety_backups/ for rollback options"
     exit $EXIT_CODE
 fi
-
